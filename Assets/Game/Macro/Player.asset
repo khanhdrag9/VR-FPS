@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: Player
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[{"name":"mouseVertical","value":{"$content":0.0,"$type":"System.Single"},"$version":"A"},{"name":"nextRotate","value":{"$content":0.0,"$type":"System.Single"},"$version":"A"}],"$version":"A"},"$version":"A"},"controlInputDefinitions":[{"key":"To","label":"To","summary":null,"hideLabel":false}],"controlOutputDefinitions":[],"valueInputDefinitions":[{"hasDefaultValue":false,"defaultValue":null,"_type":"UnityEngine.GameObject","key":"Camera","label":"Camera","summary":null,"hideLabel":false}],"valueOutputDefinitions":[],"title":"Player","summary":null,"pan":{"x":-145.1809,"y":-121.1809},"zoom":1.0,"elements":[{"coroutine":false,"defaultValues":{},"position":{"x":-717.0,"y":-456.0},"guid":"5e26b898-af6f-432c-8428-60f4ff75ad0e","$version":"A","$type":"Bolt.Update","$id":"13"},{"nest":{"source":"Macro","macro":0,"embed":null},"defaultValues":{"MovementSpeed":{"$content":5.0,"$type":"System.Single"},"MouseSen":{"$content":1.0,"$type":"System.Single"},"RotateSnap":{"$content":45.0,"$type":"System.Single"}},"position":{"x":-468.0,"y":-301.0},"guid":"021c671a-6cf9-4cf9-b6ee-d7c19f4fbda4","$version":"A","$type":"Bolt.SuperUnit","$id":"15"},{"specifyFallback":false,"kind":"Object","defaultValues":{"name":{"$content":"Camera","$type":"System.String"},"object":null},"position":{"x":-760.0,"y":-351.0},"guid":"632a84d6-d853-4449-9423-a9cf82f6520e","$version":"A","$type":"Bolt.GetVariable","$id":"18"},{"specifyFallback":false,"kind":"Object","defaultValues":{"name":{"$content":"MouseSensitivity","$type":"System.String"},"object":null},"position":{"x":-803.0,"y":-232.0},"guid":"8571de9f-a349-476a-ade3-b87f58eaaefa","$version":"A","$type":"Bolt.GetVariable","$id":"20"},{"specifyFallback":false,"kind":"Object","defaultValues":{"name":{"$content":"RotateSnap","$type":"System.String"},"object":null},"position":{"x":-774.0,"y":-113.0},"guid":"bef109ef-2ad0-4990-ba20-b4d7128638cf","$version":"A","$type":"Bolt.GetVariable","$id":"22"},{"sourceUnit":{"$ref":"13"},"sourceKey":"trigger","destinationUnit":{"$ref":"15"},"destinationKey":"i","guid":"71c792b5-88ad-4ef1-828a-3388e0c85eec","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"18"},"sourceKey":"value","destinationUnit":{"$ref":"15"},"destinationKey":"Camera","guid":"75ac46eb-b873-49ab-b7e5-681d02c011e3","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"20"},"sourceKey":"value","destinationUnit":{"$ref":"15"},"destinationKey":"MouseSen","guid":"8c5fdb28-93da-4a97-946c-1b0238d4d5eb","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"22"},"sourceKey":"value","destinationUnit":{"$ref":"15"},"destinationKey":"RotateSnap","guid":"91e26509-3127-4de8-9c84-af105874c5f4","$type":"Bolt.ValueConnection"},{"position":{"xMin":-883.0,"yMin":-541.0,"xMax":-153.0,"yMax":46.0},"label":"Locomotion","comment":null,"color":{"r":0.0,"g":0.0,"b":0.0,"a":1.0},"guid":"29cee35e-fca3-4f37-831b-a09d2e9a63e2","$version":"A","$type":"Ludiq.GraphGroup"}],"$version":"A"}}'
+    _objectReferences:
+    - {fileID: 11400000, guid: bd5166901c2f4924e8182ba2630fcd4b, type: 2}
