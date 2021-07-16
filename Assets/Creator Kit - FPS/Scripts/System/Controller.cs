@@ -61,10 +61,16 @@ public class Controller : MonoBehaviour
     List<Weapon> m_Weapons = new List<Weapon>();
     Dictionary<int, int> m_AmmoInventory = new Dictionary<int, int>();
 
-    void Awake()
+    public void SetInstance(bool isInstance)
     {
-        Instance = this;
+        if(isInstance)
+            Instance = this;
     }
+
+    // void Awake()
+    // {
+    //     Instance = this;
+    // }
     
     void Start()
     {
