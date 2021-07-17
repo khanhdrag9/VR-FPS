@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _data:
     _json: '{"declarations":{"collection":{"$content":[{"name":"muzzle place","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"trail","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"weapon
-      camera","value":null,"$version":"A"}],"$version":"A"},"$version":"A"}}'
+      camera","value":null,"$version":"A"},{"name":"min distance display trail","value":{"$content":2.5,"$type":"System.Single"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences:
     - {fileID: 3125285466847528568}
     - {fileID: 1691346627199228128, guid: bc513dca9b359aa49aac8365c74ad13d, type: 3}

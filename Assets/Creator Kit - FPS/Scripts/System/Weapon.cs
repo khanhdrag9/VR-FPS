@@ -98,7 +98,7 @@ public class Weapon : MonoBehaviour
 
     Vector3 m_ConvertedMuzzlePos;
 
-    class ActiveTrail
+    public class ActiveTrail
     {
         public LineRenderer renderer;
         public Vector3 direction;
