@@ -590,6 +590,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Healmatic500
       objectReference: {fileID: 0}
+    - target: {fileID: 3234742015143470754, guid: 760a5cd9833938442ba8a4b54bfa8148, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 760a5cd9833938442ba8a4b54bfa8148, type: 3}
 --- !u!1 &2140066820
@@ -613,7 +617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &2140066821
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -738,9 +742,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"nest":{"source":"Macro","macro":0,"embed":null}}'
-    _objectReferences:
-    - {fileID: 11400000, guid: 2f8d18b5f8bdd9946befc10adae32f13, type: 2}
+    _json: '{"nest":{"source":"Macro","macro":null,"embed":null}}'
+    _objectReferences: []
 --- !u!114 &2140066827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -768,10 +771,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
-    - target: {fileID: 4623008648940019367, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4623008648940019371, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -782,7 +781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4623008648940019371, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.11
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4623008648940019371, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
       propertyPath: m_LocalPosition.z
