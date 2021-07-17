@@ -475,10 +475,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"collection":{"$content":[{"name":"movement speed","value":{"$content":5.0,"$type":"System.Single"},"$version":"A"},{"name":"sensitivity","value":{"$content":2.0,"$type":"System.Single"},"$version":"A"},{"name":"camera","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"WeaponPlace","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Weapons","value":{"$content":[2],"$type":"System.Collections.Generic.List`1[[UnityEngine.GameObject,
+    _json: '{"declarations":{"collection":{"$content":[{"name":"movement speed","value":{"$content":5.0,"$type":"System.Single"},"$version":"A"},{"name":"sensitivity","value":{"$content":2.0,"$type":"System.Single"},"$version":"A"},{"name":"camera","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"weapon
+      camera","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"WeaponPlace","value":{"$content":2,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Weapons","value":{"$content":[3],"$type":"System.Collections.Generic.List`1[[UnityEngine.GameObject,
       UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences:
     - {fileID: 4623008649250405121}
+    - {fileID: 4623008648244028865}
     - {fileID: 4623008648923604312}
     - {fileID: 3125285465778713473, guid: e59caecfd4a039a44ba5c5a04bd20bac, type: 3}
 --- !u!114 &9165205987146932346

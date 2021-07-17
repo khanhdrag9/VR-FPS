@@ -20,6 +20,7 @@ public class PoolSystem : MonoBehaviour
 
     public void InitPool(UnityEngine.Object prefab, int size)
     {
+        Debug.Log("Init pool: " + prefab + " size " + size);
         if(m_Pools.ContainsKey(prefab))
             return;
         
@@ -33,10 +34,17 @@ public class PoolSystem : MonoBehaviour
         }
 
         m_Pools[prefab] = queue;
+        Debug.Log("Init pool is ok");
+    }
+
+    public Object CreateGameObjectInstance(Object prefab)
+    {
+        return GetInstance<Object>(prefab);
     }
 
     public T GetInstance<T>(Object prefab) where T:Object
     {
+        Debug.Log("Create " + prefab);
         Queue<Object> queue;
         if (m_Pools.TryGetValue(prefab, out queue))
         {
