@@ -21,10 +21,8 @@ public class NetworkMethod : NetworkBehaviour
         currentWeapon = name;
     }
 
-    [ClientRpc(includeOwner = false)] void RpcSpawnObject(string name)
+    public void Shoot()
     {
-        Debug.Log("My self");
-        var prefab = Resources.Load(name) as GameObject;
-        var obj = Instantiate(prefab, weaponPlace);
+        
     }
 }
