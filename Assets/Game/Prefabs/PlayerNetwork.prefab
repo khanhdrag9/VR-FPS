@@ -179,7 +179,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  playerCamera: {fileID: 6807264180422489983}
+  weaponCamera: {fileID: 6807264181832034751}
   weaponPlace: {fileID: 6807264180095428902}
+  input: {fileID: 505216106060892767}
   currentWeapon: 
 --- !u!1001 &2184381522162895998
 PrefabInstance:

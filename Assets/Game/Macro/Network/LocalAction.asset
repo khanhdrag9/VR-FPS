@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LocalAction
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[{"key":"in","label":null,"summary":null,"hideLabel":true}],"controlOutputDefinitions":[{"key":"next","label":null,"summary":null,"hideLabel":true}],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":-384.0349,"y":-310.7981},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":-858.0,"y":-449.0},"guid":"afb220be-2a80-4a8b-a5b2-3c2b0dbb0c44","$version":"A","$type":"Bolt.GraphInput"}],"$version":"A"}}'
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[{"key":"in","label":null,"summary":null,"hideLabel":true}],"controlOutputDefinitions":[{"key":"next","label":null,"summary":null,"hideLabel":true}],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":-384.0349,"y":-310.7981},"zoom":1.0,"elements":[],"$version":"A"}}'
     _objectReferences: []
