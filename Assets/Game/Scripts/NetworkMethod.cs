@@ -6,6 +6,9 @@ using Mirror;
 public class NetworkMethod : NetworkBehaviour
 {
     [SerializeField] Transform weaponPlace = null;
+    [SerializeField] [SyncVar] string currentWeapon;
+
+    public string CurrentWeapon => currentWeapon;
 
     public void SpawnWeapon(GameObject weapon)
     {
@@ -14,7 +17,7 @@ public class NetworkMethod : NetworkBehaviour
 
     [Command(requiresAuthority = false)] void CmdSpawnWeapon(string name)
     {
-        RpcSpawnObject(name);
+        currentWeapon = name;
     }
 
     [ClientRpc(includeOwner = false)] void RpcSpawnObject(string name)

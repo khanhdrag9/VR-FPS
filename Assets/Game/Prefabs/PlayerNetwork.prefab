@@ -141,10 +141,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _data:
     _json: '{"declarations":{"collection":{"$content":[{"name":"character","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"weapon
-      place","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
+      place","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"cameras","value":{"$content":[2,3],"$type":"System.Collections.Generic.List`1[[UnityEngine.Camera,
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences:
     - {fileID: 7016926128616991748}
     - {fileID: 6807264180095428902}
+    - {fileID: 6807264180422489983}
+    - {fileID: 6807264181832034751}
 --- !u!114 &8988127952289437029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,6 +179,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   weaponPlace: {fileID: 6807264180095428902}
+  currentWeapon: 
 --- !u!1001 &2184381522162895998
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -253,9 +257,19 @@ MonoBehaviour:
   m_Script: {fileID: -1999370065, guid: dcd2196c4e9166f499793f2007fcda35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &6807264180422489983 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4623008649250405121, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
+  m_PrefabInstance: {fileID: 2184381522162895998}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6807264180095428902 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4623008648923604312, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
+  m_PrefabInstance: {fileID: 2184381522162895998}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &6807264181832034751 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4623008648244028865, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
   m_PrefabInstance: {fileID: 2184381522162895998}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8029859832048244693 stripped
