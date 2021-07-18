@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: Visualize Shoot
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[{"key":"in","label":null,"summary":null,"hideLabel":true}],"controlOutputDefinitions":[{"key":"next","label":null,"summary":null,"hideLabel":true}],"valueInputDefinitions":[{"hasDefaultValue":false,"defaultValue":null,"_type":"UnityEngine.RaycastHit","key":"hit
+      info","label":"hit info","summary":null,"hideLabel":false},{"hasDefaultValue":true,"defaultValue":{"$content":0,"$type":"UnityEngine.Object"},"_type":"UnityEngine.LineRenderer","key":"trail
+      prefab","label":"trail prefab","summary":null,"hideLabel":false},{"hasDefaultValue":false,"defaultValue":null,"_type":"UnityEngine.Transform","key":"muzzle","label":"muzzle","summary":null,"hideLabel":false},{"hasDefaultValue":false,"defaultValue":{"x":0.0,"y":0.0,"z":0.0,"$type":"UnityEngine.Vector3"},"_type":"UnityEngine.Vector3","key":"hit
+      position","label":"hit position","summary":null,"hideLabel":false}],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":-144.5491,"y":368.5713},"zoom":0.8,"elements":[{"defaultValues":{},"position":{"x":-844.0,"y":172.0},"guid":"5a7e0094-6df2-4a3a-982b-e629df10a062","$version":"A","$type":"Bolt.GraphInput","$id":"15"},{"nest":{"source":"Macro","macro":1,"embed":null},"defaultValues":{},"position":{"x":-192.0,"y":-34.0},"guid":"6e762e2d-8b6d-4f28-86a2-b1ad214d1f8f","$version":"A","$type":"Bolt.SuperUnit","$id":"17"},{"nest":{"source":"Macro","macro":2,"embed":null},"defaultValues":{"trail
+      prefab":{"$content":3,"$type":"UnityEngine.Object"}},"position":{"x":181.0,"y":174.0},"guid":"e47e548b-d17b-49c6-8f3b-d30b18f05fd9","$version":"A","$type":"Bolt.SuperUnit","$id":"20"},{"defaultValues":{},"position":{"x":446.0,"y":174.0},"guid":"27ce10c3-9cc9-478f-a553-09d531e3f710","$version":"A","$type":"Bolt.GraphOutput","$id":"23"},{"member":{"name":"collider","parameterTypes":null,"targetType":"UnityEngine.RaycastHit","targetTypeName":"UnityEngine.RaycastHit","$version":"A"},"defaultValues":{},"position":{"x":-604.0,"y":58.0},"guid":"8f4a2b29-11c7-4fed-80b0-ff0b257933c5","$version":"A","$type":"Bolt.GetMember","$id":"25"},{"nest":{"source":"Macro","macro":4,"embed":null},"defaultValues":{},"position":{"x":-421.0,"y":-36.0},"guid":"17ed7a08-100d-4960-a6d8-a1a3c3d95a45","$version":"A","$type":"Bolt.SuperUnit","$id":"28"},{"nest":{"source":"Macro","macro":5,"embed":null},"defaultValues":{},"position":{"x":6.0,"y":99.0},"guid":"a64c1d62-7a8a-403c-a400-5cb3737061ee","$version":"A","$type":"Bolt.SuperUnit","$id":"31"},{"outputCount":1,"defaultValues":{},"position":{"x":-594.0,"y":-40.0},"guid":"98682287-d848-485b-a8ca-aa1edd712ab8","$version":"A","$type":"Bolt.Sequence","$id":"34"},{"sourceUnit":{"$ref":"31"},"sourceKey":"True","destinationUnit":{"$ref":"20"},"destinationKey":"In","guid":"a6cdfb7c-5b96-4bf2-8faa-fe7770edbcff","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"17"},"sourceKey":"Next","destinationUnit":{"$ref":"31"},"destinationKey":"In","guid":"cbdc0e6f-014b-45b6-8232-0a1e1be571cf","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"20"},"sourceKey":"Next","destinationUnit":{"$ref":"23"},"destinationKey":"next","guid":"0e35175d-bfd1-45fc-9f8a-47a08a2b08bf","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"28"},"sourceKey":"True","destinationUnit":{"$ref":"17"},"destinationKey":"In","guid":"546edab8-f22a-427a-819d-e45e0704e6e8","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"in","destinationUnit":{"$ref":"34"},"destinationKey":"enter","guid":"df3375b2-f66a-43fe-9153-1dbf8e5b6d32","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"34"},"sourceKey":"0","destinationUnit":{"$ref":"28"},"destinationKey":"In","guid":"bd719435-9356-4de2-9985-dc8f048e048a","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"28"},"sourceKey":"False","destinationUnit":{"$ref":"31"},"destinationKey":"In","guid":"56aecc90-4342-4a15-b82a-8ea237391ae2","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"hit
+      info","destinationUnit":{"$ref":"17"},"destinationKey":"hit info","guid":"28306805-5b95-4d94-94d6-f55b5eb70ad8","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"hit
+      info","destinationUnit":{"$ref":"25"},"destinationKey":"target","guid":"60d6890b-0750-48ca-9b91-b270f438ff9f","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"25"},"sourceKey":"value","destinationUnit":{"$ref":"28"},"destinationKey":"object","guid":"8c477019-1da0-411e-a377-1ff79f5d973e","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"trail
+      prefab","destinationUnit":{"$ref":"31"},"destinationKey":"object","guid":"d07eafed-7d4a-4972-b156-0e565512facf","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"trail
+      prefab","destinationUnit":{"$ref":"20"},"destinationKey":"trail prefab","guid":"3d11a069-48c8-42bb-8e38-f49eb0349cd3","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"muzzle","destinationUnit":{"$ref":"20"},"destinationKey":"muzzle","guid":"5637b533-1634-4e85-9d97-aa0add075783","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"hit
+      position","destinationUnit":{"$ref":"20"},"destinationKey":"hit position","guid":"8056890a-3ae5-4fd5-9af4-b2b4408e1b20","$type":"Bolt.ValueConnection"}],"$version":"A"}}'
+    _objectReferences:
+    - {fileID: 1691346627199228128, guid: bc513dca9b359aa49aac8365c74ad13d, type: 3}
+    - {fileID: 11400000, guid: a899e0e39bcc0a04abb668471f121872, type: 2}
+    - {fileID: 11400000, guid: 9f02aeb5f1015ba43ab89409370c3e74, type: 2}
+    - {fileID: 1691346627199228128, guid: bc513dca9b359aa49aac8365c74ad13d, type: 3}
+    - {fileID: 11400000, guid: f06e2c6dd519d1848bb3b3431a0844fd, type: 2}
+    - {fileID: 11400000, guid: f06e2c6dd519d1848bb3b3431a0844fd, type: 2}
