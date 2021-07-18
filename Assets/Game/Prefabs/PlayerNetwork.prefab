@@ -142,12 +142,13 @@ MonoBehaviour:
   _data:
     _json: '{"declarations":{"collection":{"$content":[{"name":"character","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"weapon
       place","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"cameras","value":{"$content":[2,3],"$type":"System.Collections.Generic.List`1[[UnityEngine.Camera,
-      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"$version":"A"},{"name":"input","value":{"$content":4,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences:
     - {fileID: 7016926128616991748}
     - {fileID: 6807264180095428902}
     - {fileID: 6807264180422489983}
     - {fileID: 6807264181832034751}
+    - {fileID: 505216106060892767}
 --- !u!114 &8988127952289437029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +256,17 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -1999370065, guid: dcd2196c4e9166f499793f2007fcda35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &505216106060892767 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1824688151950689825, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
+  m_PrefabInstance: {fileID: 2184381522162895998}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e57c2f53bcb7e54d89af9d8e96c95f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!20 &6807264180422489983 stripped
