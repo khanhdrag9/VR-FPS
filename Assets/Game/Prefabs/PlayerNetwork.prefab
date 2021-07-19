@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2184381522100452018}
   - component: {fileID: 4154149059601463811}
   - component: {fileID: 7542824631294808472}
+  - component: {fileID: 4663396935074615679}
   - component: {fileID: 2184381522100452029}
   - component: {fileID: 8988127952289437029}
   - component: {fileID: 5713674388717975862}
@@ -127,6 +128,30 @@ MonoBehaviour:
   interpolateScale: 0
   syncScale: 0
   target: {fileID: 6807264180095428902}
+--- !u!114 &4663396935074615679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2184381522100452016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734b48bea0b204338958ee3d885e11f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 1
+  localPositionSensitivity: 0.01
+  localRotationSensitivity: 0.01
+  localScaleSensitivity: 0.01
+  compressRotation: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 0
+  syncScale: 1
+  target: {fileID: 6807264180422489982}
 --- !u!114 &2184381522100452029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,13 +167,16 @@ MonoBehaviour:
   _data:
     _json: '{"declarations":{"collection":{"$content":[{"name":"character","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"weapon
       place","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"cameras","value":{"$content":[2,3],"$type":"System.Collections.Generic.List`1[[UnityEngine.Camera,
-      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"$version":"A"},{"name":"input","value":{"$content":4,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"$version":"A"},{"name":"input","value":{"$content":4,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"head","value":{"$content":5,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"body","value":{"$content":6,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"Listener","value":{"$content":7,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences:
     - {fileID: 7016926128616991748}
     - {fileID: 6807264180095428902}
     - {fileID: 6807264180422489983}
     - {fileID: 6807264181832034751}
     - {fileID: 505216106060892767}
+    - {fileID: 1015489017543848533}
+    - {fileID: 5099658074304214132}
+    - {fileID: 6807264180422489952}
 --- !u!114 &8988127952289437029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,9 +300,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e57c2f53bcb7e54d89af9d8e96c95f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &6807264180422489982 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4623008649250405120, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
+  m_PrefabInstance: {fileID: 2184381522162895998}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &6807264180422489983 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 4623008649250405121, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
+  m_PrefabInstance: {fileID: 2184381522162895998}
+  m_PrefabAsset: {fileID: 0}
+--- !u!81 &6807264180422489952 stripped
+AudioListener:
+  m_CorrespondingSourceObject: {fileID: 4623008649250405150, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
   m_PrefabInstance: {fileID: 2184381522162895998}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &6807264180095428902 stripped
@@ -285,6 +323,16 @@ Transform:
 --- !u!20 &6807264181832034751 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 4623008648244028865, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
+  m_PrefabInstance: {fileID: 2184381522162895998}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5099658074304214132 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6383259371453331466, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
+  m_PrefabInstance: {fileID: 2184381522162895998}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1015489017543848533 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1173124525545537067, guid: 504a01681cbf7f747a95c315a873b023, type: 3}
   m_PrefabInstance: {fileID: 2184381522162895998}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8029859832048244693 stripped

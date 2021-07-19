@@ -32,6 +32,7 @@ public class NetworkMethod : NetworkBehaviour
 
     [Command(requiresAuthority = false)] void CmdShoot(uint from)
     {
+        CustomEvent.Trigger(gameObject, "ServerShoot");  
         RpcShoot(from);
     }
 
@@ -39,5 +40,21 @@ public class NetworkMethod : NetworkBehaviour
     {
         if(NetworkClient.localPlayer.netId != from)
             CustomEvent.Trigger(gameObject, "RpcShoot");  
+    }
+
+    public void HitTarget(GameObject hit, int damage)
+    {
+        if(isServer)
+            CmdhitTarget(hit, damage);
+    }
+
+    [Command(requiresAuthority = false)] void CmdhitTarget(GameObject hit, int damage)
+    {
+        RpcHitTarget(hit, damage);
+    }
+
+    [ClientRpc] void RpcHitTarget(GameObject player, int damage)    // player network
+    {
+        Debug.Log("hit" + player.name + " damage: " + damage);
     }
 }
