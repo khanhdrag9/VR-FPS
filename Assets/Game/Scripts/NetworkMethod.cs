@@ -27,7 +27,7 @@ public class NetworkMethod : NetworkBehaviour
 
     public void Shoot()
     {
-        CmdShoot(netId);
+        CmdShoot(NetworkClient.localPlayer.netId);
     }
 
     [Command(requiresAuthority = false)] void CmdShoot(uint from)
@@ -37,7 +37,7 @@ public class NetworkMethod : NetworkBehaviour
 
     [ClientRpc] void RpcShoot(uint from)
     {
-        if(netId != from)
+        if(NetworkClient.localPlayer.netId != from)
             CustomEvent.Trigger(gameObject, "RpcShoot");  
     }
 }
