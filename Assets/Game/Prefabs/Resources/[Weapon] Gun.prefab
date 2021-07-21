@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3125285465778713475}
   - component: {fileID: 9157996429883749406}
   - component: {fileID: 8330384605720801261}
+  - component: {fileID: 2717443992946274882}
   m_Layer: 6
   m_Name: '[Weapon] Gun'
   m_TagString: Untagged
@@ -98,8 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"collection":{"$content":[{"name":"muzzle place","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"trail","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"aim
-      camera","value":null,"$version":"A"},{"name":"weapon camera","value":null,"$version":"A"}],"$version":"A"},"$version":"A"}}'
+    _json: '{"declarations":{"collection":{"$content":[{"name":"muzzle place","value":{"$content":0,"$type":"UnityEngine.Object"},"$version":"A"},{"name":"trail","value":{"$content":1,"$type":"UnityEngine.Object"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences:
     - {fileID: 3125285466847528568}
     - {fileID: 1691346627199228128, guid: bc513dca9b359aa49aac8365c74ad13d, type: 3}
@@ -119,6 +119,22 @@ MonoBehaviour:
     _json: '{"nest":{"source":"Macro","macro":0,"embed":null}}'
     _objectReferences:
     - {fileID: 11400000, guid: d609b5507160df947934c5e88a69b4f3, type: 2}
+--- !u!114 &2717443992946274882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3125285465778713473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7160cfb5a3ce744aa761ef9662a222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aimCamera: {fileID: 0}
+  weaponCamera: {fileID: 0}
+  isHitting: 0
+  hitPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &3125285466507034027
 GameObject:
   m_ObjectHideFlags: 0
