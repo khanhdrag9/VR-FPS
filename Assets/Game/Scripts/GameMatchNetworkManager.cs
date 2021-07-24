@@ -19,8 +19,9 @@ public class GameMatchNetworkManager : NetworkManager
     public List<MatchInfo> matches = new List<MatchInfo>();
     public Dictionary<NetworkConnection, PlayerInfo> players = new Dictionary<NetworkConnection, PlayerInfo>();
     public ClientMatchOperation clientAction;
-
+    public string playerName = "Player";
     public ClientMatchMsg currentLobby {get; private set;} = new ClientMatchMsg {players = new PlayerInfo[0], yourMatch = null};
+    int yourConnectId = 0;
 
     void OnGUI()
     {
@@ -30,6 +31,7 @@ public class GameMatchNetworkManager : NetworkManager
         }
     }
 
+#region Server
     public override void OnStartServer()
     {
         NetworkServer.RegisterHandler<CreateMatchMsg>((conn, msg)=>
@@ -57,8 +59,8 @@ public class GameMatchNetworkManager : NetworkManager
             PlayerInfo playerInfo = new PlayerInfo
             {
                 matchId = matchId,
+                name = msg.playerName,
                 ready = false,
-                connectionId = conn.connectionId
             };
 
             matches.Add(matchInfo);
@@ -69,6 +71,7 @@ public class GameMatchNetworkManager : NetworkManager
             conn.Send<ClientMatchMsg>(new ClientMatchMsg
             {
                 yourMatch = matchInfo,
+                yours = playerInfo,
                 players = new PlayerInfo[]{playerInfo}
             });
         });
@@ -84,7 +87,7 @@ public class GameMatchNetworkManager : NetworkManager
                 {
                     matchId = matchInfo.matchId,
                     ready = false,
-                    connectionId = conn.connectionId
+                    name = msg.playerName
                 };
 
                 players.Add(conn, playerInfo);
@@ -97,33 +100,26 @@ public class GameMatchNetworkManager : NetworkManager
                 Debug.LogWarning($"[Server] Couldn't find match {msg.matchId}");
             }
         });
-    }
-
-    public override void OnStartClient()
-    {
-        NetworkClient.RegisterHandler<ClientMatchMsg>(msg=>
+    
+        NetworkServer.RegisterHandler<ClientLobbyState>((conn, msg)=>
         {
-            currentLobby = msg;
+            if(!players.ContainsKey(conn))
+            {
+                Debug.LogError("[Server] cannot set ready for client connection " + conn.connectionId);
+                return;
+            }
 
-            Debug.Log("Your match is: " + currentLobby.yourMatch.matchId);
-            Debug.Log("all players is: " + currentLobby.players.Length);
+            MatchInfo matchInfo = matches.FirstOrDefault(m => m.matchId == players[conn].matchId);
+            if(matchInfo == null)
+            {
+                Debug.LogError($"[Server] client connection {conn.connectionId} has match id invaild {players[conn].matchId}");
+                return;
+            }
 
+            players[conn].ready = msg.ready;
+
+            UpdateListPlayerInMatch(matchInfo);
         });
-
-        CustomEvent.Trigger(gameObject, "OnStartClient");
-    }
-
-    public override void OnStopClient()
-    {
-        base.OnStopClient();
-        currentLobby = new ClientMatchMsg();
-    }
-
-    public override void OnClientConnect(NetworkConnection conn)
-    {
-        base.OnClientConnect(conn);
-
-        CustomEvent.Trigger(gameObject, "OnClientConnect");
     }
 
     public override void OnServerDisconnect(NetworkConnection conn)
@@ -140,26 +136,6 @@ public class GameMatchNetworkManager : NetworkManager
             MatchInfo matchInfo = matches.FirstOrDefault(m => m.matchId == playerInfo.matchId);
             UpdateListPlayerInMatch(matchInfo);
         }
-    }
-
-    public void ClientRequestCreateMatch(int maxPlayers = 8)
-    {
-        if(!NetworkClient.active) return;
-
-        NetworkClient.Send<CreateMatchMsg>(new CreateMatchMsg
-        {
-            maxPlayers = maxPlayers
-        });
-    }
-
-    public void ClientRequestJoinMatch(string matchId)
-    {
-        if(!NetworkClient.active) return;
-
-        NetworkClient.Send<JoinMatchMsg>(new JoinMatchMsg
-        {
-            matchId = matchId
-        });
     }
 
     void ServerAddPlayer(GameObject prefab, Guid key, NetworkConnection connection)
@@ -187,15 +163,80 @@ public class GameMatchNetworkManager : NetworkManager
 
         var otherPlayers = players.Where(p => p.Value.matchId == matchInfo.matchId);
         var playerInforArray = otherPlayers.Select(e => e.Value).ToArray();
+
         foreach (var p in otherPlayers)
         {
+            Debug.Log("Send to: " + p.Key.connectionId);
             p.Key.Send<ClientMatchMsg>(new ClientMatchMsg
             {
                 yourMatch = matchInfo,
+                yours = p.Value,
                 players = playerInforArray
             });
         }   
     }
+
+#endregion
+
+#region Client
+    public override void OnStartClient()
+    {
+        NetworkClient.RegisterHandler<ClientMatchMsg>(msg=>
+        {
+            currentLobby = msg;
+            Debug.Log("Your match is: " + currentLobby.yourMatch.matchId + "");
+        });
+
+        CustomEvent.Trigger(gameObject, "OnStartClient");
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        currentLobby = new ClientMatchMsg();
+    }
+
+    public override void OnClientConnect(NetworkConnection conn)
+    {
+        base.OnClientConnect(conn);
+
+        CustomEvent.Trigger(gameObject, "OnClientConnect");
+    }
+
+    public void ClientRequestCreateMatch(int maxPlayers = 8)
+    {
+        if(!NetworkClient.active) return;
+
+        NetworkClient.Send<CreateMatchMsg>(new CreateMatchMsg
+        {
+            maxPlayers = maxPlayers,
+            playerName = playerName + UnityEngine.Random.Range(100, 1000)
+        });
+    }
+
+    public void ClientRequestJoinMatch(string matchId)
+    {
+        if(!NetworkClient.active) return;
+
+        NetworkClient.Send<JoinMatchMsg>(new JoinMatchMsg
+        {
+            matchId = matchId,
+            playerName = playerName + UnityEngine.Random.Range(100, 1000)
+        });
+    }
+
+    public void ClientSetReady(bool ready)
+    {
+        if(!NetworkClient.active) return;
+        NetworkClient.Send<ClientLobbyState>(new ClientLobbyState
+        {
+            ready = ready
+        });
+    }
+#endregion
+
+
+
 }
 
 

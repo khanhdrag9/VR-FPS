@@ -4,19 +4,26 @@ using UnityEngine;
 public struct CreateMatchMsg : NetworkMessage
 {
     public int maxPlayers;
+    public string playerName;
 }
 
 public struct JoinMatchMsg: NetworkMessage
 {
     public string matchId;
+    public string playerName;
 }
 
 public struct ClientMatchMsg : NetworkMessage
 {
     public MatchInfo yourMatch;
+    public PlayerInfo yours;
     public PlayerInfo[] players;
 }
 
+public struct ClientLobbyState : NetworkMessage
+{
+    public bool ready;
+}
 
 [Serializable]
 public class MatchInfo
@@ -33,7 +40,6 @@ public class PlayerInfo
     public string matchId;
     public string name = "player";
     public bool ready;
-    public int connectionId;
 }
 
  public enum ServerMatchOperation : byte
