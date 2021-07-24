@@ -17,8 +17,10 @@ public class GameMatchNetworkManager : NetworkManager
 
 
     public List<MatchInfo> matches = new List<MatchInfo>();
-    public List<PlayerInfo> players = new List<PlayerInfo>();
+    public Dictionary<NetworkConnection, PlayerInfo> players = new Dictionary<NetworkConnection, PlayerInfo>();
     public ClientMatchOperation clientAction;
+
+    public ClientMatchMsg currentLobby {get; private set;} = new ClientMatchMsg {players = new PlayerInfo[0], yourMatch = null};
 
     void OnGUI()
     {
@@ -60,7 +62,7 @@ public class GameMatchNetworkManager : NetworkManager
             };
 
             matches.Add(matchInfo);
-            players.Add(playerInfo);
+            players.Add(conn, playerInfo);
 
             ServerAddPlayer(inRoomPlayerPrefab, matchInfo.key, conn);
 
@@ -78,24 +80,17 @@ public class GameMatchNetworkManager : NetworkManager
             MatchInfo matchInfo = matches.FirstOrDefault(m => m.matchId == msg.matchId);
             if(matchInfo != null)
             {
-                List<PlayerInfo> otherPlayers = players.Where(p => p.matchId == matchInfo.matchId).ToList();
                 PlayerInfo playerInfo = new PlayerInfo
                 {
                     matchId = matchInfo.matchId,
                     ready = false,
                     connectionId = conn.connectionId
                 };
-                otherPlayers.Add(playerInfo);
 
-                players.Add(playerInfo);
+                players.Add(conn, playerInfo);
 
                 ServerAddPlayer(inRoomPlayerPrefab, matchInfo.key, conn);
-
-                conn.Send<ClientMatchMsg>(new ClientMatchMsg
-                {
-                    yourMatch = matchInfo,
-                    players = otherPlayers.ToArray()
-                });
+                UpdateListPlayerInMatch(matchInfo);
             }
             else
             {
@@ -108,27 +103,42 @@ public class GameMatchNetworkManager : NetworkManager
     {
         NetworkClient.RegisterHandler<ClientMatchMsg>(msg=>
         {
-            Debug.Log("Your match is: " + msg.yourMatch.matchId);
-            Debug.Log("all players is: " + msg.players.Length);
+            currentLobby = msg;
+
+            Debug.Log("Your match is: " + currentLobby.yourMatch.matchId);
+            Debug.Log("all players is: " + currentLobby.players.Length);
+
         });
 
         CustomEvent.Trigger(gameObject, "OnStartClient");
     }
 
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        currentLobby = new ClientMatchMsg();
+    }
+
     public override void OnClientConnect(NetworkConnection conn)
     {
         base.OnClientConnect(conn);
+
         CustomEvent.Trigger(gameObject, "OnClientConnect");
     }
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
         base.OnServerDisconnect(conn);
-        int index = players.FindIndex(p => p.connectionId == conn.connectionId);
-        if(index >= 0)
+
+        if(players.ContainsKey(conn))
         {
             Debug.Log("[Server] Removed player connection " + conn.connectionId);
-            players.RemoveAt(index);
+
+            PlayerInfo playerInfo = players[conn];
+
+            players.Remove(conn);
+            MatchInfo matchInfo = matches.FirstOrDefault(m => m.matchId == playerInfo.matchId);
+            UpdateListPlayerInMatch(matchInfo);
         }
     }
 
@@ -169,6 +179,22 @@ public class GameMatchNetworkManager : NetworkManager
         }
 
         NetworkServer.AddPlayerForConnection(connection, player);
+    }
+
+    void UpdateListPlayerInMatch(MatchInfo matchInfo)
+    {
+        if(matchInfo == null) return;
+
+        var otherPlayers = players.Where(p => p.Value.matchId == matchInfo.matchId);
+        var playerInforArray = otherPlayers.Select(e => e.Value).ToArray();
+        foreach (var p in otherPlayers)
+        {
+            p.Key.Send<ClientMatchMsg>(new ClientMatchMsg
+            {
+                yourMatch = matchInfo,
+                players = playerInforArray
+            });
+        }   
     }
 }
 
