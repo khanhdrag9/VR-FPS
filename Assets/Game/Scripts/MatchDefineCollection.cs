@@ -32,6 +32,7 @@ public class MatchInfo
     public Guid key;
     public int maxPlayers = 8;
     public bool open;
+    public int leaderConnectionId;
 }
 
 [Serializable]
@@ -40,6 +41,7 @@ public class PlayerInfo
     public string matchId;
     public string name = "player";
     public bool ready;
+    public int connectionId;    // Client.connection is 0, so use it carefully
 }
 
  public enum ServerMatchOperation : byte

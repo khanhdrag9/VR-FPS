@@ -21,7 +21,6 @@ public class GameMatchNetworkManager : NetworkManager
     public ClientMatchOperation clientAction;
     public string playerName = "Player";
     public ClientMatchMsg currentLobby {get; private set;} = new ClientMatchMsg {players = new PlayerInfo[0], yourMatch = null};
-    int yourConnectId = 0;
 
     void OnGUI()
     {
@@ -53,7 +52,8 @@ public class GameMatchNetworkManager : NetworkManager
                 matchId = matchId,
                 key = Guid.NewGuid(),
                 maxPlayers = msg.maxPlayers,
-                open = true
+                open = true,
+                leaderConnectionId = conn.connectionId
             };
 
             PlayerInfo playerInfo = new PlayerInfo
@@ -61,6 +61,7 @@ public class GameMatchNetworkManager : NetworkManager
                 matchId = matchId,
                 name = msg.playerName,
                 ready = false,
+                connectionId = conn.connectionId
             };
 
             matches.Add(matchInfo);
@@ -87,7 +88,8 @@ public class GameMatchNetworkManager : NetworkManager
                 {
                     matchId = matchInfo.matchId,
                     ready = false,
-                    name = msg.playerName
+                    name = msg.playerName,
+                    connectionId = conn.connectionId
                 };
 
                 players.Add(conn, playerInfo);
@@ -232,6 +234,23 @@ public class GameMatchNetworkManager : NetworkManager
         {
             ready = ready
         });
+    }
+
+    public bool IsLeader()
+    {
+        if(currentLobby.yourMatch == null)
+        {
+            Debug.LogWarning("[Client] you haven't created any lobbies");
+            return false;
+        }
+
+        if(currentLobby.yours == null)
+        {
+            Debug.LogError("[Client] PlayerInfor is null thought you joined a lobby?");
+            return false;
+        }
+
+        return currentLobby.yourMatch.leaderConnectionId == currentLobby.yours.connectionId;
     }
 #endregion
 
