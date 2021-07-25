@@ -17,7 +17,8 @@ public class NetworkMethod : NetworkBehaviour
 
     public void SpawnWeapon(GameObject weapon)
     {
-        CmdSpawnWeapon(weapon.name);
+        // if(netIdentity.connectionToServer.isReady)
+            CmdSpawnWeapon(weapon.name);
     }
 
     [Command(requiresAuthority = false)] void CmdSpawnWeapon(string name)

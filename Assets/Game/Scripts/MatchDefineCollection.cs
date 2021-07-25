@@ -32,6 +32,11 @@ public struct ClientLobbyState : NetworkMessage
     public bool ready;
 }
 
+public struct Response : NetworkMessage
+{
+    public string msg;
+}
+
 [Serializable]
 public class MatchInfo
 {

@@ -20,19 +20,23 @@ public class GameMatchNetworkManager : NetworkManager
     [Tooltip("lock match ID created, useful for hosting (must be != empty or null)")]
     public string fixMatchId = null;
 
-    [Tooltip("Match informations, server only")]
+    [Tooltip("Match informations. Server only")]
     public List<MatchInfo> matches = new List<MatchInfo>();
 
-    [Tooltip("All player informations, server only")]
+    [Tooltip("All player informations. Server only")]
     public Dictionary<NetworkConnection, PlayerInfo> players = new Dictionary<NetworkConnection, PlayerInfo>();
     
-    [Tooltip("start action, which indicate what you planned to do: Create room or join a lobby,...")]
+    [Tooltip("start action, which indicate what you planned to do: Create room or join a lobby,.... Client only")]
     public ClientMatchOperation clientAction;
 
     [Tooltip("Name of player which is registed and displayed to other players in lobby and in-game play")]
     public string playerName = "Player";
 
     public ClientMatchMsg currentLobby {get; private set;} = new ClientMatchMsg {players = new PlayerInfo[0], yourMatch = null};
+
+
+    const string NOT_FOUND_LOBBY = "not_found_lobby";
+    const string NOT_CREATE_LOBBY = "not_create_lobby";
 
     void OnGUI()
     {
@@ -70,6 +74,10 @@ public class GameMatchNetworkManager : NetworkManager
             if(count < 0)
             {
                 Debug.LogWarning("[Server] Rare case: Couldn't get a matchID");
+                conn.Send<Response>(new Response
+                {
+                    msg = NOT_CREATE_LOBBY
+                });
                 return;
             }
 
@@ -107,12 +115,18 @@ public class GameMatchNetworkManager : NetworkManager
         {
             if(!NetworkServer.active) return;
 
+            void NotFound() => conn.Send<Response>(new Response
+            {
+                msg = NOT_FOUND_LOBBY
+            });
+
             MatchInfo matchInfo = GetMatchInfo(msg.matchId);
             if(matchInfo != null)
             {
                 if(!matchInfo.open)
                 {
                     Debug.Log($"[Server] Match {matchInfo.matchId} closed");
+                    NotFound();
                     return;
                 }
 
@@ -129,7 +143,8 @@ public class GameMatchNetworkManager : NetworkManager
                 ServerAddPlayer(inRoomPlayerPrefab, matchInfo.key, conn);
                 UpdateListPlayerInMatch(matchInfo);
             }
- 
+            else
+                NotFound();
         });
     
         NetworkServer.RegisterHandler<ClientLobbyState>((conn, msg)=>
@@ -301,13 +316,34 @@ public class GameMatchNetworkManager : NetworkManager
             }
         });
 
+        NetworkClient.RegisterHandler<Response>(msg =>
+        {
+            switch(msg.msg)
+            {
+                case NOT_FOUND_LOBBY:
+                    if(mode == NetworkManagerMode.Host)
+                        StopHost();
+                    else if(mode == NetworkManagerMode.ClientOnly)
+                        StopClient();
+                break;
+                case NOT_CREATE_LOBBY:
+                    if(mode == NetworkManagerMode.Host)
+                        StopHost();
+                    else if(mode == NetworkManagerMode.ClientOnly)
+                        StopClient();
+                break;
+                default:
+                break;
+            }
+        });
+
         CustomEvent.Trigger(gameObject, "OnStartClient");
     }
 
     public override void OnStopClient()
     {
         base.OnStopClient();
-        currentLobby = new ClientMatchMsg {players = new PlayerInfo[0], yourMatch = null};
+        Reset();
     }
 
     public override void OnClientConnect(NetworkConnection conn)
@@ -393,6 +429,12 @@ public class GameMatchNetworkManager : NetworkManager
         return currentLobby.yourMatch.leaderConnectionId == currentLobby.yours.connectionId;
     }
 
+    void Reset()
+    {
+        currentLobby = new ClientMatchMsg {players = new PlayerInfo[0], yourMatch = null};
+        clientAction = ClientMatchOperation.None;
+        matchId = string.Empty;
+    }
     bool BasicCheckCurrentLobby()
     {
         if(currentLobby.yourMatch == null)
