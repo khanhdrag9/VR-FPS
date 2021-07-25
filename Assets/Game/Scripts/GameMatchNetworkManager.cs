@@ -13,14 +13,25 @@ public class GameMatchNetworkManager : NetworkManager
     public GameObject inRoomPlayerPrefab = null;
     [Scene] public string gameplayScene = null;
 
-    [Header("Debug")]
+
+    [Tooltip("match id which is used to join a lobby online, leave null or empty to join a host via IP address")]
+    public string matchId;
+
+    [Tooltip("lock match ID created, useful for hosting (must be != empty or null)")]
     public string fixMatchId = null;
 
-
+    [Tooltip("Match informations, server only")]
     public List<MatchInfo> matches = new List<MatchInfo>();
+
+    [Tooltip("All player informations, server only")]
     public Dictionary<NetworkConnection, PlayerInfo> players = new Dictionary<NetworkConnection, PlayerInfo>();
+    
+    [Tooltip("start action, which indicate what you planned to do: Create room or join a lobby,...")]
     public ClientMatchOperation clientAction;
+
+    [Tooltip("Name of player which is registed and displayed to other players in lobby and in-game play")]
     public string playerName = "Player";
+
     public ClientMatchMsg currentLobby {get; private set;} = new ClientMatchMsg {players = new PlayerInfo[0], yourMatch = null};
 
     void OnGUI()
@@ -97,7 +108,7 @@ public class GameMatchNetworkManager : NetworkManager
             if(!NetworkServer.active) return;
 
             MatchInfo matchInfo = GetMatchInfo(msg.matchId);
-            if(matchInfo != null && !matchInfo.open)
+            if(matchInfo != null)
             {
                 if(!matchInfo.open)
                 {
@@ -118,10 +129,7 @@ public class GameMatchNetworkManager : NetworkManager
                 ServerAddPlayer(inRoomPlayerPrefab, matchInfo.key, conn);
                 UpdateListPlayerInMatch(matchInfo);
             }
-            else
-            {
-                Debug.LogWarning($"[Server] Couldn't find match {msg.matchId}");
-            }
+ 
         });
     
         NetworkServer.RegisterHandler<ClientLobbyState>((conn, msg)=>
@@ -286,6 +294,8 @@ public class GameMatchNetworkManager : NetworkManager
                     NetworkServer.isLoadingScene = true;
                 }
 
+                clientAction = msg.clientOperation;
+
                 NetworkClient.isLoadingScene = true;
                 loadingSceneAsync = SceneManager.LoadSceneAsync(gameplayScene);
             }
@@ -310,12 +320,15 @@ public class GameMatchNetworkManager : NetworkManager
     public override void OnClientSceneChanged(NetworkConnection conn)
     {
         base.OnClientSceneChanged(conn);
-        if (!autoCreatePlayer && NetworkClient.localPlayer == null)
+        if(clientAction == ClientMatchOperation.BeginGame)
         {
-            NetworkClient.Send<InMatchOrGameRequest>(new InMatchOrGameRequest
+            if (!autoCreatePlayer && NetworkClient.localPlayer == null)
             {
-                clientOperation = ClientMatchOperation.Started
-            });
+                NetworkClient.Send<InMatchOrGameRequest>(new InMatchOrGameRequest
+                {
+                    clientOperation = ClientMatchOperation.Started
+                });
+            }
         }
     }
 

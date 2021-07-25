@@ -67,10 +67,11 @@ MonoBehaviour:
   - {fileID: 1045124320454922899, guid: 5ebdc315e29846d49a5185647a41050b, type: 3}
   inRoomPlayerPrefab: {fileID: 1045124320454922899, guid: 5ebdc315e29846d49a5185647a41050b, type: 3}
   gameplayScene: Assets/Game/Scenes/Playground.unity
-  fixMatchId: 123
+  matchId: 
+  fixMatchId: 
   matches: []
-  players: []
   clientAction: 0
+  playerName: Player
 --- !u!114 &512230505471775249
 MonoBehaviour:
   m_ObjectHideFlags: 0
