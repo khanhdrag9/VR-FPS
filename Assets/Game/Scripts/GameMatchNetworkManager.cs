@@ -81,7 +81,7 @@ public class GameMatchNetworkManager : NetworkManager
         {
             if(!NetworkServer.active) return;
 
-            MatchInfo matchInfo = matches.FirstOrDefault(m => m.matchId == msg.matchId);
+            MatchInfo matchInfo = GetMatchInfo(msg.matchId);
             if(matchInfo != null)
             {
                 PlayerInfo playerInfo = new PlayerInfo
@@ -105,22 +105,39 @@ public class GameMatchNetworkManager : NetworkManager
     
         NetworkServer.RegisterHandler<ClientLobbyState>((conn, msg)=>
         {
-            if(!players.ContainsKey(conn))
+            if(GetPlayerInforAndMatchInfo(conn, out PlayerInfo playerInfo, out MatchInfo matchInfo))
             {
-                Debug.LogError("[Server] cannot set ready for client connection " + conn.connectionId);
-                return;
+                players[conn].ready = msg.ready;
+                UpdateListPlayerInMatch(matchInfo);
             }
-
-            MatchInfo matchInfo = matches.FirstOrDefault(m => m.matchId == players[conn].matchId);
-            if(matchInfo == null)
+        });
+    
+        NetworkServer.RegisterHandler<InMatchOrGameRequest>((conn, msg)=>
+        {
+            switch(msg.clientOperation)
             {
-                Debug.LogError($"[Server] client connection {conn.connectionId} has match id invaild {players[conn].matchId}");
-                return;
+                case ClientMatchOperation.Started:
+                    if(!GetPlayerInforAndMatchInfo(conn, out PlayerInfo playerInfo, out MatchInfo matchInfo)) break;
+                    
+                    if(!IsAllPlayerReadyOnServer(matchInfo, out KeyValuePair<NetworkConnection, PlayerInfo>[] allPlayerInfo))
+                    {
+                        Debug.LogWarning("[Server] All lobby member haven't been ready yet or there aren't any players in the lobby");
+                        break;
+                    }
+
+                    foreach (var info in allPlayerInfo)
+                    {
+                        Debug.Log("Send to: " + info.Key.connectionId);
+                        info.Key.Send<SceneMessage>(new SceneMessage
+                        {
+                            sceneName = gameplayScene
+                        });
+                    }
+
+                break;
+                default:
+                break;
             }
-
-            players[conn].ready = msg.ready;
-
-            UpdateListPlayerInMatch(matchInfo);
         });
     }
 
@@ -146,7 +163,7 @@ public class GameMatchNetworkManager : NetworkManager
         player.name = $"{prefab.name} [connId={connection.connectionId}]";
         NetworkMatchChecker matchChecker = player.GetComponent<NetworkMatchChecker>();
         if(matchChecker)
-        {
+        { 
             matchChecker.matchId = key;
         }
         else
@@ -168,7 +185,6 @@ public class GameMatchNetworkManager : NetworkManager
 
         foreach (var p in otherPlayers)
         {
-            Debug.Log("Send to: " + p.Key.connectionId);
             p.Key.Send<ClientMatchMsg>(new ClientMatchMsg
             {
                 yourMatch = matchInfo,
@@ -178,6 +194,48 @@ public class GameMatchNetworkManager : NetworkManager
         }   
     }
 
+    bool GetPlayerInforAndMatchInfo(NetworkConnection conn, out PlayerInfo playerInfo, out MatchInfo matchInfo)
+    {
+        playerInfo = null;
+        matchInfo = null;
+
+        var temp_playerInfo = GetPlayerInfo(conn.connectionId); if(temp_playerInfo == null) return false; 
+        var temp_matchInfo = GetMatchInfo(temp_playerInfo.matchId); if(temp_matchInfo == null) return false; 
+
+        playerInfo = temp_playerInfo;
+        matchInfo = temp_matchInfo;
+        return true;
+    }
+
+    PlayerInfo GetPlayerInfo(int connectionId)
+    {
+        var result = players.FirstOrDefault(p => p.Value.connectionId == connectionId).Value;
+        if(result == null)
+        {
+            Debug.LogError($"[Server] Couldn't find player has connectionId {connectionId}");
+        }
+        return result;
+    }
+
+    MatchInfo GetMatchInfo(string matchId)
+    {
+        var result = matches.FirstOrDefault(m => m.matchId == matchId);
+        if(result == null)
+        {
+            Debug.LogError($"[Server] Couldn't find match has matchId {matchId}");
+        }
+        return result;
+    }
+
+    bool IsAllPlayerReadyOnServer(MatchInfo matchInfo, out KeyValuePair<NetworkConnection, PlayerInfo>[] allPlayerInfo)
+    {
+        allPlayerInfo = new KeyValuePair<NetworkConnection, PlayerInfo>[0];
+        if(matchInfo == null)
+            return false;
+
+        allPlayerInfo = players.Where(p => p.Value.matchId == matchInfo.matchId).ToArray();
+        return allPlayerInfo.Length > 0 && allPlayerInfo.All(p => p.Value.ready);
+    }
 #endregion
 
 #region Client
@@ -227,6 +285,20 @@ public class GameMatchNetworkManager : NetworkManager
         });
     }
 
+    public void ClientRequestStartMatch()
+    {
+        if(!IsAllReady())
+        {
+            Debug.LogWarning("[Client ]All lobby member haven't been ready yet");
+            return;
+        }
+
+        NetworkClient.Send<InMatchOrGameRequest>(new InMatchOrGameRequest
+        {
+            clientOperation = ClientMatchOperation.Started
+        });
+    }
+
     public void ClientSetReady(bool ready)
     {
         if(!NetworkClient.active) return;
@@ -236,7 +308,23 @@ public class GameMatchNetworkManager : NetworkManager
         });
     }
 
+    public bool IsAllReady()
+    {
+        if(!BasicCheckCurrentLobby())
+            return false;
+        
+        return currentLobby.players.All(p => p.ready);
+    }
+
     public bool IsLeader()
+    {
+        if(!BasicCheckCurrentLobby())
+            return false;
+
+        return currentLobby.yourMatch.leaderConnectionId == currentLobby.yours.connectionId;
+    }
+
+    bool BasicCheckCurrentLobby()
     {
         if(currentLobby.yourMatch == null)
         {
@@ -250,7 +338,7 @@ public class GameMatchNetworkManager : NetworkManager
             return false;
         }
 
-        return currentLobby.yourMatch.leaderConnectionId == currentLobby.yours.connectionId;
+        return true;
     }
 #endregion
 

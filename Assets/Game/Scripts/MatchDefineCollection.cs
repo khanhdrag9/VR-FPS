@@ -13,6 +13,12 @@ public struct JoinMatchMsg: NetworkMessage
     public string playerName;
 }
 
+public struct InMatchOrGameRequest : NetworkMessage
+{
+    public ClientMatchOperation clientOperation;
+     
+}
+
 public struct ClientMatchMsg : NetworkMessage
 {
     public MatchInfo yourMatch;
