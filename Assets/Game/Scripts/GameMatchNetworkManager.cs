@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 using Bolt;
+using UnityEngine.SceneManagement;
 
 public class GameMatchNetworkManager : NetworkManager
 {
@@ -114,29 +115,31 @@ public class GameMatchNetworkManager : NetworkManager
     
         NetworkServer.RegisterHandler<InMatchOrGameRequest>((conn, msg)=>
         {
-            switch(msg.clientOperation)
+            if(msg.clientOperation == ClientMatchOperation.BeginGame)
             {
-                case ClientMatchOperation.Started:
-                    if(!GetPlayerInforAndMatchInfo(conn, out PlayerInfo playerInfo, out MatchInfo matchInfo)) break;
-                    
-                    if(!IsAllPlayerReadyOnServer(matchInfo, out KeyValuePair<NetworkConnection, PlayerInfo>[] allPlayerInfo))
-                    {
-                        Debug.LogWarning("[Server] All lobby member haven't been ready yet or there aren't any players in the lobby");
-                        break;
-                    }
+                if(!GetPlayerInforAndMatchInfo(conn, out PlayerInfo playerInfo, out MatchInfo matchInfo)) return;
+                
+                if(!IsAllPlayerReadyOnServer(matchInfo, out KeyValuePair<NetworkConnection, PlayerInfo>[] allPlayerInfo))
+                {
+                    Debug.LogWarning("[Server] All lobby member haven't been ready yet or there aren't any players in the lobby");
+                    return;
+                }
 
-                    foreach (var info in allPlayerInfo)
-                    {
-                        Debug.Log("Send to: " + info.Key.connectionId);
-                        info.Key.Send<SceneMessage>(new SceneMessage
-                        {
-                            sceneName = gameplayScene
-                        });
-                    }
+                matchInfo.open = false;
 
-                break;
-                default:
-                break;
+                foreach (var info in allPlayerInfo)
+                {
+                    info.Key.Send<InMatchOrGameRequest>(new InMatchOrGameRequest
+                    {
+                        clientOperation = msg.clientOperation,
+                        serverOperation = ServerMatchOperation.Start
+                    });
+                }
+            }
+            else if(msg.clientOperation == ClientMatchOperation.Started)
+            {
+                if(!GetPlayerInforAndMatchInfo(conn, out PlayerInfo playerInfo, out MatchInfo matchInfo)) return;
+                ServerAddPlayer(playerPrefab, matchInfo.key, conn);
             }
         });
     }
@@ -247,6 +250,20 @@ public class GameMatchNetworkManager : NetworkManager
             Debug.Log("Your match is: " + currentLobby.yourMatch.matchId + "");
         });
 
+        NetworkClient.RegisterHandler<InMatchOrGameRequest>(msg=>
+        {
+            if(msg.serverOperation == ServerMatchOperation.Start)
+            {
+                if(NetworkServer.active) // This is host mode
+                {
+                    NetworkServer.isLoadingScene = true;
+                }
+
+                NetworkClient.isLoadingScene = true;
+                loadingSceneAsync = SceneManager.LoadSceneAsync(gameplayScene);
+            }
+        });
+
         CustomEvent.Trigger(gameObject, "OnStartClient");
     }
 
@@ -261,6 +278,18 @@ public class GameMatchNetworkManager : NetworkManager
         base.OnClientConnect(conn);
 
         CustomEvent.Trigger(gameObject, "OnClientConnect");
+    }
+
+    public override void OnClientSceneChanged(NetworkConnection conn)
+    {
+        base.OnClientSceneChanged(conn);
+        if (!autoCreatePlayer && NetworkClient.localPlayer == null)
+        {
+            NetworkClient.Send<InMatchOrGameRequest>(new InMatchOrGameRequest
+            {
+                clientOperation = ClientMatchOperation.Started
+            });
+        }
     }
 
     public void ClientRequestCreateMatch(int maxPlayers = 8)
@@ -295,7 +324,7 @@ public class GameMatchNetworkManager : NetworkManager
 
         NetworkClient.Send<InMatchOrGameRequest>(new InMatchOrGameRequest
         {
-            clientOperation = ClientMatchOperation.Started
+            clientOperation = ClientMatchOperation.BeginGame
         });
     }
 
@@ -328,7 +357,6 @@ public class GameMatchNetworkManager : NetworkManager
     {
         if(currentLobby.yourMatch == null)
         {
-            Debug.LogWarning("[Client] you haven't created any lobbies");
             return false;
         }
 

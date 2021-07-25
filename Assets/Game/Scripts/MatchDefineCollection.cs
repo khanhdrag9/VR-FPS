@@ -16,7 +16,8 @@ public struct JoinMatchMsg: NetworkMessage
 public struct InMatchOrGameRequest : NetworkMessage
 {
     public ClientMatchOperation clientOperation;
-     
+    public ServerMatchOperation serverOperation;
+
 }
 
 public struct ClientMatchMsg : NetworkMessage
@@ -53,12 +54,7 @@ public class PlayerInfo
  public enum ServerMatchOperation : byte
 {
     None,
-    Create,
-    Cancel,
-    Start,
-    Join,
-    Leave,
-    Ready
+    Start
 }
 
 public enum ClientMatchOperation : byte
@@ -70,5 +66,6 @@ public enum ClientMatchOperation : byte
     Joined,
     Departed,
     UpdateRoom,
+    BeginGame,
     Started
 }
