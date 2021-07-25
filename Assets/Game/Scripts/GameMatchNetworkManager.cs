@@ -38,15 +38,29 @@ public class GameMatchNetworkManager : NetworkManager
         {
             if(!NetworkServer.active) return;
 
-            string matchId = new string(new char[]
-            {
-                ((char)UnityEngine.Random.Range(97, 123)),
-                ((char)UnityEngine.Random.Range(97, 123)),
-                ((char)UnityEngine.Random.Range(97, 123))
-            });
+            int count = 10;
+            string matchId = "";
 
+            while(count >= 0 && matches.FirstOrDefault(m => m.matchId == matchId) != null)
+            {
+                matchId = new string(new char[]
+                {
+                    ((char)UnityEngine.Random.Range(97, 123)),
+                    ((char)UnityEngine.Random.Range(97, 123)),
+                    ((char)UnityEngine.Random.Range(97, 123))
+                });
+
+                --count;
+            }
+            
             if(!string.IsNullOrEmpty(fixMatchId))
                 matchId = fixMatchId;
+
+            if(count < 0)
+            {
+                Debug.LogWarning("[Server] Rare case: Couldn't get a matchID");
+                return;
+            }
 
             MatchInfo matchInfo = new MatchInfo
             {
@@ -83,8 +97,14 @@ public class GameMatchNetworkManager : NetworkManager
             if(!NetworkServer.active) return;
 
             MatchInfo matchInfo = GetMatchInfo(msg.matchId);
-            if(matchInfo != null)
+            if(matchInfo != null && !matchInfo.open)
             {
+                if(!matchInfo.open)
+                {
+                    Debug.Log($"[Server] Match {matchInfo.matchId} closed");
+                    return;
+                }
+
                 PlayerInfo playerInfo = new PlayerInfo
                 {
                     matchId = matchInfo.matchId,
@@ -186,6 +206,13 @@ public class GameMatchNetworkManager : NetworkManager
         var otherPlayers = players.Where(p => p.Value.matchId == matchInfo.matchId);
         var playerInforArray = otherPlayers.Select(e => e.Value).ToArray();
 
+        if(playerInforArray.Length == 0)
+        {
+            bool removed = matches.Remove(matchInfo);
+            Debug.Log($"There aren't any players in match {matchInfo.matchId}, so remove this match -> {removed}");
+            return;
+        }
+
         foreach (var p in otherPlayers)
         {
             p.Key.Send<ClientMatchMsg>(new ClientMatchMsg
@@ -270,7 +297,7 @@ public class GameMatchNetworkManager : NetworkManager
     public override void OnStopClient()
     {
         base.OnStopClient();
-        currentLobby = new ClientMatchMsg();
+        currentLobby = new ClientMatchMsg {players = new PlayerInfo[0], yourMatch = null};
     }
 
     public override void OnClientConnect(NetworkConnection conn)
